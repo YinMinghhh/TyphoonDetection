@@ -1,0 +1,26 @@
+<annotation>
+	<folder>0523</folder>
+	<filename>NOMChannel13_image_20230523_1730.png</filename>
+	<path>E:\typoon\2023\FLDK\0523\NOMChannel13_image_20230523_1730.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>2748</width>
+		<height>2748</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>typhoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1387</xmin>
+			<ymin>777</ymin>
+			<xmax>2124</xmax>
+			<ymax>1250</ymax>
+		</bndbox>
+	</object>
+</annotation>

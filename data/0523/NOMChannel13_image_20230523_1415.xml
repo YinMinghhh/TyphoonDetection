@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<annotation>
+  <folder>images</folder>
+  <filename>NOMChannel13_image_20230523_1415.png</filename>
+  <size>
+    <width>2748</width>
+    <height>2748</height>
+    <depth>3</depth>
+  </size>
+  <object>
+    <name>typhoon</name>
+    <pose>Unspecified</pose>
+    <truncated>0</truncated>
+    <difficult>0</difficult>
+    <bndbox>
+      <xmin>1472</xmin>
+      <ymin>1188</ymin>
+      <xmax>1482</xmax>
+      <ymax>1198</ymax>
+    </bndbox>
+  </object>
+</annotation>
