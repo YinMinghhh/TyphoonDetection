@@ -1,6 +1,7 @@
 import os
 import shutil
 import xml.etree.ElementTree as ET
+import random
 
 classes = []
 
@@ -14,10 +15,20 @@ def get_yolo_box(size, box):
     return (x, y, w, h)
 
 def source2yolo(source_path, target_path): 
+    if (os.path.exists(target_path)):
+        shutil.rmtree(target_path)
+
     images_path = os.path.join(target_path, 'images')
-    os.makedirs(images_path)
     labels_path = os.path.join(target_path, 'labels')
-    os.makedirs(labels_path)
+
+    # if (os.path.exists(images_path) and os.path.exists(labels_path)):
+    #     return
+
+    if (not os.path.exists(images_path)):
+        os.makedirs(images_path)
+    if (not os.path.exists(labels_path)):
+        os.makedirs(labels_path)
+
 
     for folder in os.listdir(source_path):
         folder_path = os.path.join(source_path, folder)
@@ -56,7 +67,42 @@ def source2yolo(source_path, target_path):
             else:
                 pass
 
+def data_split(train_path, test_path):
+    '''
+    把 train_path 中随机选择的三成文件移动到 test_path
+    '''
+    if (os.path.exists(test_path)): 
+        shutil.rmtree(test_path)
+
+    os.makedirs(test_path)
+
+    test_images_path = os.path.join(test_path, 'images')
+    test_labels_path = os.path.join(test_path, 'labels')
+
+    if (not os.path.exists(test_images_path)): 
+        os.makedirs(test_images_path)
+    if (not os.path.exists(test_labels_path)): 
+        os.makedirs(test_labels_path)
+
+    train_images_path = os.path.join(train_path, 'images')
+    train_labels_path = os.path.join(train_path, 'labels')
+
+    image_file_list = os.listdir(train_images_path)
+    selected_file_list = random.sample(image_file_list, k=int(len(image_file_list) * 0.3))
+
+    print('Count of total files: ' + str(len(image_file_list)) + ', selected files: ' + str(int(len(image_file_list) * 0.3)))
+
+    # print(selected_file_list)
+
+    for file in selected_file_list: 
+        # print(file)
+        shutil.move(os.path.join(train_images_path, file), test_images_path)
+        shutil.move(os.path.join(train_labels_path, file.replace('png', 'txt')), test_labels_path)
+
+
+
 if __name__ == '__main__': 
     source_path = '..\data'
     target_path = '..\dataset'
-    source2yolo(source_path, target_path)
+    source2yolo(source_path, os.path.join(target_path, 'train'))
+    data_split(os.path.join(target_path, 'train'), os.path.join(target_path, 'test'))
