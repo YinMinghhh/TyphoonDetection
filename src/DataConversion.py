@@ -21,8 +21,6 @@ def source2yolo(source_path, target_path):
     images_path = os.path.join(target_path, 'images')
     labels_path = os.path.join(target_path, 'labels')
 
-    # if (os.path.exists(images_path) and os.path.exists(labels_path)):
-    #     return
 
     if (not os.path.exists(images_path)):
         os.makedirs(images_path)
@@ -67,35 +65,44 @@ def source2yolo(source_path, target_path):
             else:
                 pass
 
-def data_split(train_path, test_path):
+def data_split(train_path, val_path, test_path):
     '''
-    把 train_path 中随机选择的三成文件移动到 test_path
+    把 train_path 中随机选择的
     '''
+    if (os.path.exists(val_path)):
+        shutil.rmtree(val_path)
     if (os.path.exists(test_path)): 
         shutil.rmtree(test_path)
 
-    os.makedirs(test_path)
-
+    val_images_path = os.path.join(val_path, 'images')
+    val_labels_path = os.path.join(val_path, 'labels')
     test_images_path = os.path.join(test_path, 'images')
     test_labels_path = os.path.join(test_path, 'labels')
 
-    if (not os.path.exists(test_images_path)): 
-        os.makedirs(test_images_path)
-    if (not os.path.exists(test_labels_path)): 
-        os.makedirs(test_labels_path)
+    os.makedirs(val_images_path)
+    os.makedirs(val_labels_path)
+    os.makedirs(test_images_path)
+    os.makedirs(test_labels_path)
 
     train_images_path = os.path.join(train_path, 'images')
     train_labels_path = os.path.join(train_path, 'labels')
 
+    # val
     image_file_list = os.listdir(train_images_path)
-    selected_file_list = random.sample(image_file_list, k=int(len(image_file_list) * 0.3))
+    print('Count of total files: ' + str(len(image_file_list)))
+    val_collection = random.sample(image_file_list, k=int(len(image_file_list) * 0.2))
+    print('Count of val files: ' + str(int(len(val_collection))))
 
-    print('Count of total files: ' + str(len(image_file_list)) + ', selected files: ' + str(int(len(image_file_list) * 0.3)))
+    for file in val_collection: 
+        shutil.move(os.path.join(train_images_path, file), val_images_path)
+        shutil.move(os.path.join(train_labels_path, file.replace('png', 'txt')), val_labels_path)
 
-    # print(selected_file_list)
+    # test
+    image_file_list = os.listdir(train_images_path)
+    test_collection = random.sample(image_file_list, k=int(len(val_collection)))
+    print('Count of test files: ' + str(int(len(test_collection))))
 
-    for file in selected_file_list: 
-        # print(file)
+    for file in test_collection: 
         shutil.move(os.path.join(train_images_path, file), test_images_path)
         shutil.move(os.path.join(train_labels_path, file.replace('png', 'txt')), test_labels_path)
 
@@ -105,4 +112,4 @@ if __name__ == '__main__':
     source_path = '..\data'
     target_path = '..\dataset'
     source2yolo(source_path, os.path.join(target_path, 'train'))
-    data_split(os.path.join(target_path, 'train'), os.path.join(target_path, 'test'))
+    data_split(os.path.join(target_path, 'train'), os.path.join(target_path, 'val'), os.path.join(target_path, 'test'))
